@@ -54,6 +54,8 @@ class RLArduinoInstrument:public RLArduinoSerial {
     SerialCommand* g_commandArray = nullptr;
     size_t g_commmandArraySize = 0;
     bool g_debug = true;
+    //functions
+    void sortCommands();
 };
 
 #endif // _RL_ARDUINO_INSTRUMENT_H_

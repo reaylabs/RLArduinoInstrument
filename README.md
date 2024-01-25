@@ -3,7 +3,7 @@ The RLArduinoInstrument class extends the RLArduinoSerial class to provide autom
 functions. When debug is true, the menu command menu is drawn via the serial port, otherwise only the
 response to commands is sent.
 
-## Class RLArduinoSerial
+## Class RLArduinoInstrument
 ```C++
 explicit RLArduinoInstrument(char terminator, int timeout = 1000);
 void addCommand(command_t command, const char* description, error_t (*commandHandler)(command_t command));
@@ -16,6 +16,7 @@ error_t requestFloat(float &value);
 error_t requestLong(long &value);
 error_t requestString(String &value);
 void setDebug(bool debug) {g_debug = debug;}
+void sortCommands();
 ```
 
 ## Simple Menu Example

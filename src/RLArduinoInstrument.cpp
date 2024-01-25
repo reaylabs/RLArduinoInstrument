@@ -26,6 +26,7 @@ void RLArduinoInstrument::addCommand(command_t command, const char* description,
   g_commandArray[g_commmandArraySize - 1].command=command;
   g_commandArray[g_commmandArraySize - 1].description=description;
   g_commandArray[g_commmandArraySize - 1].commandHandler=commandHandler;
+  sortCommands();
 }
 
 //execute command
@@ -138,5 +139,19 @@ error_t RLArduinoInstrument::requestString(String &value)
       }
   } else {
       return ERROR_TIMEOUT;
+  }
+}
+
+//sort the command array by command
+void RLArduinoInstrument::sortCommands()
+{
+  for (size_t i = 0; i < g_commmandArraySize; i++) {
+    for (size_t j = i + 1; j < g_commmandArraySize; j++) {
+      if (g_commandArray[i].command > g_commandArray[j].command) {
+        SerialCommand temp = g_commandArray[i];
+        g_commandArray[i] = g_commandArray[j];
+        g_commandArray[j] = temp;
+      }
+    }
   }
 }

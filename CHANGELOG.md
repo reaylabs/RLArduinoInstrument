@@ -8,3 +8,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.0.0] - 2024-01-24
 - Initial release
+
+## [1.1.0] - 2024-01-25
+- Added the sortCommands function
