@@ -11,3 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.1.0] - 2024-01-25
 - Added the sortCommands function
+
+## [1.2.0] - 2024-01-26
+- modified the functionality of the printResult function
+- modified the RLArduinoInstruementDemo.ino example
+- added tabs instead of spaces in the keywords.txt file
