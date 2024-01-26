@@ -19,7 +19,7 @@ RLArduinoInstrument::RLArduinoInstrument(char terminator, int timeout):RLArduino
 }
 
 //Add a command to the command array
-void RLArduinoInstrument::addCommand(command_t command, const char* description, error_t (*commandHandler)(command_t command))
+void RLArduinoInstrument::addCommand(command_t command, const char* description, error_t (*commandHandler)(index_t index))
 {
   g_commmandArraySize++;
   g_commandArray = (SerialCommand*)realloc(g_commandArray, g_commmandArraySize * sizeof(SerialCommand));
@@ -33,9 +33,9 @@ void RLArduinoInstrument::addCommand(command_t command, const char* description,
 error_t RLArduinoInstrument::executeCommand(command_t command)
 {
   error_t error = ERROR_COMMAND_NOT_FOUND;
-  for (size_t i = 0; i < g_commmandArraySize; i++) {
-    if (g_commandArray[i].command == command) {
-     error = g_commandArray[i].commandHandler(command);
+  for (size_t index = 0; index < g_commmandArraySize; index++) {
+    if (g_commandArray[index].command == command) {
+     error = g_commandArray[index].commandHandler(index);
      break;
     }
   }
@@ -45,17 +45,44 @@ error_t RLArduinoInstrument::executeCommand(command_t command)
 //print commands
 void RLArduinoInstrument::printCommands()
 {
-  for (size_t i = 0; i < g_commmandArraySize; i++) {
-    Serial.print(g_commandArray[i].command);
-    Serial.print(" ");
-    Serial.println(g_commandArray[i].description);
+  if (g_debug) {
+    Serial.println("\n*** Commands ***");
+    for (size_t i = 0; i < g_commmandArraySize; i++) {
+      Serial.print(g_commandArray[i].command);
+      Serial.print(": ");
+      Serial.println(g_commandArray[i].description);
+    }
   }
 }
 
+//print value
+// Explicit instantiation for float
+template void RLArduinoInstrument::printResult<float>(error_t, index_t, float);
+template void RLArduinoInstrument::printResult<long>(error_t, index_t, long);
+template void RLArduinoInstrument::printResult<String>(error_t, index_t, String);
+
+template <typename T> 
+void RLArduinoInstrument::printResult(error_t error, index_t index,  T value)
+{
+  if (g_debug) {
+    Serial.print(g_commandArray[index].description);
+    Serial.print(": ");
+  }
+  if (error == ERROR_NONE) {
+    Serial.println(value);
+  }
+}
+
+//print command description
+void RLArduinoInstrument::printCommandDescription(index_t index)
+{
+  if (g_debug) {
+    Serial.println(g_commandArray[index].description);
+  }
+}
 //print error
 void RLArduinoInstrument::printError(error_t error)
 {
-  if (error == ERROR_NULL) return;
   if (g_debug) {
     switch (error) {
       case ERROR_NONE:
@@ -66,6 +93,9 @@ void RLArduinoInstrument::printError(error_t error)
         break;
       case ERROR_TIMEOUT:
         Serial.println("Timeout");
+        break;
+      case ERROR_INVALID_VALUE:
+        Serial.println("Invalid Value");
         break;
       default:
         Serial.println("Unknown Error");
@@ -79,66 +109,66 @@ void RLArduinoInstrument::printError(error_t error)
 //print menu
 void RLArduinoInstrument::printMenu()
 {
+   if(g_debug)
+   {
+    printCommands();
+    printPrompt();
+   }
+}
+
+//Print the prompt for a new command
+void RLArduinoInstrument::printPrompt()
+{
   if (g_debug) {
-    Serial.println("\n*** Commands ***");
-    for (int i = 0; i < g_commmandArraySize; i++)
-    {
-      Serial.print(g_commandArray[i].command);
-      Serial.print(": ");
-      Serial.println(g_commandArray[i].description);
-    }
     Serial.print("Enter Command: ");
   }
 }
 
-error_t RLArduinoInstrument::requestFloat(float &value)
+error_t RLArduinoInstrument::requestFloat(float &value, index_t index)
 {
   if (g_debug) {
-    Serial.print("Value: ");
+    Serial.print(g_commandArray[index].description);
+    Serial.print(": ");
   }
   if (waitForFloatWithTimeout(&value, NULL)) {
       if(g_debug) {
         Serial.println(value);
-        return ERROR_NULL;
-      } else {
-        return ERROR_NONE;
       }
+      return ERROR_NONE;
   } else {
       return ERROR_TIMEOUT;
   }
 }
 
-error_t RLArduinoInstrument::requestLong(long &value)
+error_t RLArduinoInstrument::requestLong(long &value, index_t index) 
 {
   if (g_debug) {
-    Serial.print("Value: ");
+    Serial.print(g_commandArray[index].description);
+    Serial.print(": ");
   }
   if (waitForLongWithTimeout(&value, NULL)) {
       if(g_debug) {
         Serial.println(value);
-        return ERROR_NULL;
-      } else {
-        return ERROR_NONE;
       }
+      return ERROR_NONE;
   } else {
       return ERROR_TIMEOUT;
   }
 }
 
-error_t RLArduinoInstrument::requestString(String &value)
+error_t RLArduinoInstrument::requestString(String &value, index_t index)
 {
   if (g_debug) {
-    Serial.print("Value: ");
+    Serial.print(g_commandArray[index].description);
+    Serial.print(": ");
   }
   if (waitForStringWithTimeout(&value, NULL)) {
       if(g_debug) {
         Serial.println(value);
-        return ERROR_NULL;
-      } else {
-        return ERROR_NONE;
       }
+      return ERROR_NONE;
   } else {
-      return ERROR_TIMEOUT;
+    return ERROR_TIMEOUT;
   }
 }
 

@@ -13,51 +13,81 @@ Revision History
 
 #include "RLArduinoInstrument.h"
 
-RLArduinoInstrument instrument('\n', 10000); 
+#define terminator '\n'
+#define timeout 10000 //milli-seconds
 
-error_t cmdGetFloat(command_t command) {
+RLArduinoInstrument instrument(terminator, timeout); 
+
+error_t cmdGetAdcVoltage(index_t index) {
+  error_t error = ERROR_NONE;
+  float voltage = 2.345;
+  // error = getAdcVoltage(&voltage);
+  instrument.printResult(error,index, voltage);
+  return error;
+}
+
+error_t cmdSetDacVoltage(index_t index) {
   float value;
-  error_t error = instrument.requestFloat(value);
-  value = value + 10;
-  if (instrument.getDebug()) {
-    Serial.print("New Value: ");
+  error_t error = instrument.requestFloat(value, index);
+  if (value < 0 || value > 5.0) error = ERROR_INVALID_VALUE;
+  if (!error) {
+    //error = setDacVoltage(value);
   }
-  Serial.println(value);
   return error;
 }
 
-error_t cmdGetLong(command_t command) {
+error_t cmdSetLedRed(index_t index) {
+  //setLedRed();
+  instrument.printCommandDescription(index);
+  return ERROR_NONE;
+}
+
+error_t cmdSetSampleRate(index_t index) {
+  //Set the sample rate for the AD7791 ADC
+  error_t error = ERROR_NONE;
+  uint8_t filterReg = 0x04;
   long value;
-  error_t error = instrument.requestLong(value);
-  value = value + 10;
-  if (instrument.getDebug()) {
-    Serial.print("New Value: ");
+  bool debug = instrument.getDebug();
+  if (debug) {
+    instrument.printCommandDescription(index);
+    Serial.println("0: 120Hz");
+    Serial.println("1: 100Hz");
+    Serial.println("2: 33.3Hz");
+    Serial.println("3: 20Hz");
+    Serial.println("4: 16.6Hz");
+    Serial.println("5: 16.7Hz");
+    Serial.println("6: 13.3Hz");
+    Serial.println("7: 9.5Hz");
   }
-  Serial.println(value);
+  //get the value
+  instrument.requestLong(value,index);
+  //check limits
+  if (value < 0 || value > 7) {
+    error = ERROR_INVALID_VALUE;
+  }
+  if (!error) {
+    filterReg &= 0xF8; //clear lower 3 bits
+    filterReg |= value;
+  }
+  if (debug) {
+    Serial.print("Filter Register: 0x");
+    Serial.println(filterReg, HEX);
+  }
   return error;
 }
 
-error_t cmdGetString(command_t command) {
-  String value;
-  error_t error = instrument.requestString(value);
-  value = value + "_TEST";
-  if (instrument.getDebug()) {
-    Serial.print("New Value: ");
-  }
-  Serial.println(value);
-  return error;
-}
-
-error_t cmdToggleDebug(command_t command) {
+error_t cmdToggleDebug(index_t index) {
   instrument.setDebug(!instrument.getDebug());
+  instrument.printCommandDescription(index);
   return ERROR_NONE;
 }
 
 void addCommands() {
-  instrument.addCommand(0,"Get Float Value", cmdGetFloat);
-  instrument.addCommand(1,"Get Long Value", cmdGetLong);
-  instrument.addCommand(2,"Get String Value", cmdGetString);
-  instrument.addCommand(3,"Toggle Debug", cmdToggleDebug);
+  instrument.addCommand(0,"Set Dac Voltage", cmdSetDacVoltage);
+  instrument.addCommand(1,"Get Adc Voltage", cmdGetAdcVoltage);
+  instrument.addCommand(2,"Set LED Red", cmdSetLedRed);
+  instrument.addCommand(3,"Set Filter Register", cmdSetSampleRate);
+  instrument.addCommand(4,"Toggle Debug", cmdToggleDebug);
 }
 
 void setup() {

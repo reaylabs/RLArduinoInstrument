@@ -2,18 +2,28 @@
 
 # Data types (KEYWORD1)
 RLArduinoInstrument	KEYWORD1
+error_t	KEYWORD1
+command_t	KEYWORD1
+index_t	KEYWORD1
 
 # Methods and Functions (KEYWORD2)
-addCommand KEYWORD2
-executeCommand KEYWORD2
-getDebug KEYWORD2
-printCommands KEYWORD2
-printMenu KEYWORD2
-printError KEYWORD2
-requestFloat KEYWORD2
-requestLong KEYWORD2
-requestStr9jg KEYWORD2
-setDebug   KEYWORD2
-sotCommands KEYWORD2
+addCommand	KEYWORD2
+executeCommand	KEYWORD2
+getDebug	KEYWORD2
+printCommands	KEYWORD2
+printCommandDescription	KEYWORD2
+printError	KEYWORD2
+printMenu	KEYWORD2
+printPrompt	KEYWORD2
+#printResult	KEYWORD2
+requestFloat	KEYWORD2
+requestLong	KEYWORD2
+requestString	KEYWORD2
+setDebug	KEYWORD2
+sotCommands	KEYWORD2
 
 # Constants (LITERAL1)
+ERROR_NONE	LITERAL1
+ERROR_COMMAND_NOT_FOUND	LITERAL1
+ERROR_TIMEOUT	LITERAL1
+ERROR_INVALID_VALUE	LITERAL1
