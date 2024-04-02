@@ -19,7 +19,11 @@ class RLArduinoInstrument:public RLArduinoSerial {
     void printMenu();
     void printPrompt();
     template <typename T> 
+    void printLabelValue(error_t error, String label,  T value);
+    void printLabelValue(error_t error, String label, float value, int precision)
+    template <typename T> 
     void printResult(error_t error, index_t index,  T value);
+    void printResult(error_t error, index_t index, float value, int precision)
     error_t requestFloat(float &value, index_t index);
     error_t requestLong(long &value, index_t index);
     error_t requestString(String &value, index_t index);

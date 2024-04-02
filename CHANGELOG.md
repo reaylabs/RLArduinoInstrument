@@ -16,3 +16,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - modified the functionality of the printResult function
 - modified the RLArduinoInstruementDemo.ino example
 - added tabs instead of spaces in the keywords.txt file
+
+## [1.3.0] - 2024-04-02
+- added the printLabelValue functions

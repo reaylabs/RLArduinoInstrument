@@ -13,9 +13,10 @@ getDebug	KEYWORD2
 printCommands	KEYWORD2
 printCommandDescription	KEYWORD2
 printError	KEYWORD2
+printLabelValue	KEYWORD2
 printMenu	KEYWORD2
 printPrompt	KEYWORD2
-#printResult	KEYWORD2
+printResult	KEYWORD2
 requestFloat	KEYWORD2
 requestLong	KEYWORD2
 requestString	KEYWORD2

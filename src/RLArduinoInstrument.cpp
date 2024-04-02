@@ -11,6 +11,7 @@ Revision History
   01-24-2024 : Initial Code
 */
 
+
 #include "RLArduinoInstrument.h"
 
 //Constructor
@@ -55,15 +56,43 @@ void RLArduinoInstrument::printCommands()
   }
 }
 
+
+//print prompt and value
+
+template void RLArduinoInstrument::printLabelValue<long>(error_t, String label, long);
+template void RLArduinoInstrument::printLabelValue<String>(error_t, String label, String);
+
+template <typename T> 
+void RLArduinoInstrument::printLabelValue(error_t error, String label,  T value)
+{
+  if (g_debug) {
+    Serial.print(label);
+    Serial.print(": ");
+  }
+  if (error == ERROR_NONE) {
+    Serial.println(value);
+  }
+}
+
+void RLArduinoInstrument::printLabelValue(error_t error, String label, float value, int precision)
+{
+  if (g_debug) {
+    Serial.print(label);
+    Serial.print(": ");
+  }
+  if (error == ERROR_NONE) {
+    Serial.println(value, precision);
+  }
+}
+
 //print value
-// Explicit instantiation for float
-template void RLArduinoInstrument::printResult<float>(error_t, index_t, float);
 template void RLArduinoInstrument::printResult<long>(error_t, index_t, long);
 template void RLArduinoInstrument::printResult<String>(error_t, index_t, String);
 
 template <typename T> 
 void RLArduinoInstrument::printResult(error_t error, index_t index,  T value)
 {
+ 
   if (g_debug) {
     Serial.print(g_commandArray[index].description);
     Serial.print(": ");
@@ -71,6 +100,27 @@ void RLArduinoInstrument::printResult(error_t error, index_t index,  T value)
   if (error == ERROR_NONE) {
     Serial.println(value);
   }
+}
+
+void RLArduinoInstrument::printResult(error_t error, index_t index, float value, int precision)
+{
+  if (g_debug) {
+    Serial.print(g_commandArray[index].description);
+    Serial.print(": ");
+  }
+  if (error == ERROR_NONE) {
+    Serial.println(value, precision);
+  }
+}
+
+
+//print no data command
+void RLArduinoInstrument::printResult( index_t index)
+{
+  if (g_debug) {
+    Serial.print(g_commandArray[index].description);
+  }
+  Serial.println(c_noData);
 }
 
 //print command description
@@ -102,7 +152,7 @@ void RLArduinoInstrument::printError(error_t error)
         break;  
     }
   } else {
-    Serial.println("E"+ String(error));
+    Serial.println(error);
   }
 }
 

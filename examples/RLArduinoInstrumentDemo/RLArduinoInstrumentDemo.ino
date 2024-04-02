@@ -38,7 +38,7 @@ error_t cmdSetDacVoltage(index_t index) {
 
 error_t cmdSetLedRed(index_t index) {
   //setLedRed();
-  instrument.printCommandDescription(index);
+  instrument.printNoDataResult(index);
   return ERROR_NONE;
 }
 

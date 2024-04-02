@@ -18,16 +18,22 @@ Revision History
 #include "RLArduinoSerial.h"
 #include <SPI.h>
 
+#define RL_ARDUINO_INSTRUMENT_LIB_VERSION  (F("1.3.0"))
+
 //Error definitions
 #define ERROR_NONE 0
 #define ERROR_COMMAND_NOT_FOUND 1
 #define ERROR_TIMEOUT 2
 #define ERROR_INVALID_VALUE 3
+#define ERROR_PARSE_ERROR 4
 
 //Menu type definitions
 typedef uint8_t error_t;
 typedef uint16_t command_t;
 typedef uint16_t index_t;
+
+//global variable
+const char c_noData = '\0';
 
 //Command structure
 struct SerialCommand {
@@ -49,7 +55,13 @@ class RLArduinoInstrument:public RLArduinoSerial {
     void printMenu();
     void printPrompt();
     template <typename T> 
+    void printLabelValue(error_t error, String label,  T value);
+    void printLabelValue(error_t error, String label,  float value, int precision = 3);
+
+    template <typename T> 
     void printResult(error_t error, index_t index,  T value);
+    void printResult(error_t error, index_t index,  float value, int precision = 3);
+    void printResult(index_t index);
     error_t requestFloat(float &value, index_t index);
     error_t requestLong(long &value, index_t index);
     error_t requestString(String &value, index_t index);
