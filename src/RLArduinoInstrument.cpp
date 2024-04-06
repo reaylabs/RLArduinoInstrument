@@ -87,6 +87,7 @@ void RLArduinoInstrument::printLabelValue(error_t error, String label, float val
 
 //print value
 template void RLArduinoInstrument::printResult<long>(error_t, index_t, long);
+template void RLArduinoInstrument::printResult<byte>(error_t, index_t, byte);
 template void RLArduinoInstrument::printResult<String>(error_t, index_t, String);
 
 template <typename T> 
@@ -174,7 +175,7 @@ void RLArduinoInstrument::printPrompt()
   }
 }
 
-error_t RLArduinoInstrument::requestFloat(float &value, index_t index)
+error_t RLArduinoInstrument::requestFloat(float &value, index_t index, int precision)
 {
   if (g_debug) {
     Serial.print(g_commandArray[index].description);
@@ -182,7 +183,7 @@ error_t RLArduinoInstrument::requestFloat(float &value, index_t index)
   }
   if (waitForFloatWithTimeout(&value, NULL)) {
       if(g_debug) {
-        Serial.println(value);
+        Serial.println(value, precision);
       }
       return ERROR_NONE;
   } else {

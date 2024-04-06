@@ -18,7 +18,7 @@ Revision History
 #include "RLArduinoSerial.h"
 #include <SPI.h>
 
-#define RL_ARDUINO_INSTRUMENT_LIB_VERSION  (F("1.3.0"))
+#define RL_ARDUINO_INSTRUMENT_LIB_VERSION  (F("1.4.0"))
 
 //Error definitions
 #define ERROR_NONE 0
@@ -62,7 +62,7 @@ class RLArduinoInstrument:public RLArduinoSerial {
     void printResult(error_t error, index_t index,  T value);
     void printResult(error_t error, index_t index,  float value, int precision = 3);
     void printResult(index_t index);
-    error_t requestFloat(float &value, index_t index);
+    error_t requestFloat(float &value, index_t index,int precision = 3);
     error_t requestLong(long &value, index_t index);
     error_t requestString(String &value, index_t index);
     void setDebug(bool debug) {g_debug = debug;}

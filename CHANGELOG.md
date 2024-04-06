@@ -19,3 +19,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [1.3.0] - 2024-04-02
 - added the printLabelValue functions
+
+## [1.4.0] - 2024-04-05
+- added precision to the requestFloat function
