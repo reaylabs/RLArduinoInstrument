@@ -10,6 +10,8 @@ index_t	KEYWORD1
 addCommand	KEYWORD2
 executeCommand	KEYWORD2
 getDebug	KEYWORD2
+print	KEYWORD2
+println	KEYWORD2
 printCommands	KEYWORD2
 printCommandDescription	KEYWORD2
 printError	KEYWORD2

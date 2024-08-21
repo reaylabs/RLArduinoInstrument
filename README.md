@@ -21,14 +21,18 @@ class RLArduinoInstrument:public RLArduinoSerial {
     template <typename T> 
     void printLabelValue(error_t error, String label,  T value);
     void printLabelValue(error_t error, String label,  float value, int precision = 3);
-
+    void printString(String value);
+    void printlnString(String value);
     template <typename T> 
     void printResult(error_t error, index_t index,  T value);
     void printResult(error_t error, index_t index,  float value, int precision = 3);
     void printResult(index_t index);
+    error_t requestFloat(float &value, String prompt,int precision = 3);
     error_t requestFloat(float &value, index_t index,int precision = 3);
     error_t requestLong(long &value, index_t index);
+    error_t requestLong(long &value, String prompt);
     error_t requestString(String &value, index_t index);
+    error_t requestString(String &value,String prompt);
     void setDebug(bool debug) {g_debug = debug;}
   private:
     //global variables
